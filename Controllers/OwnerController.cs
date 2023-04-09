@@ -53,6 +53,7 @@ namespace DogGo.Controllers
         {
             try
             {
+                 owner.NeighborhoodId = 1; // this default value was added in order for the form to complete
                 _OwnerRepo.AddOwner(owner);
 
                 return RedirectToAction("Index");
@@ -85,23 +86,30 @@ namespace DogGo.Controllers
         }
 
         // GET: OwnerController/Delete/5
+        // the contents of this method were provided by Nashville Software School
         public ActionResult Delete(int id)
         {
-            return View();
+            Owner owner = _OwnerRepo.GetOwnerById(id);
+
+            return View(owner);
         }
 
         // POST: OwnerController/Delete/5
+        // POST: Owners/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Owner owner)
+            // this internal method was provided by Nashville Software School
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _OwnerRepo.DeleteOwner(id);
+
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View(owner);
             }
         }
     }
